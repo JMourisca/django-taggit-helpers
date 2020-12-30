@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import (GenericStackedInline,
-    GenericTabularInline)
+                                               GenericTabularInline)
 from django.db.models import Count
+from django.utils.translation import ugettext_lazy as _
 
 from taggit.models import TaggedItem
 
@@ -32,8 +33,9 @@ class TaggitCounter():
 
     def taggit_counter(self, obj):
         return obj.taggit_counter
+
     taggit_counter.admin_order_field = 'taggit_counter'
-    taggit_counter.short_description = '# of Tags'
+    taggit_counter.short_description = _('# of Tags')
 
 
 class TaggitListFilter(admin.SimpleListFilter):
@@ -48,12 +50,12 @@ class TaggitListFilter(admin.SimpleListFilter):
             list_filter = [TaggitListFilter]
     """
 
-    title = 'Tags'
+    title = _('Tags')
     parameter_name = 'tag'
 
     def lookups(self, request, model_admin):
         model_tags = [tag.name for tag in
-            TaggedItem.tags_for(model_admin.model)]
+                      TaggedItem.tags_for(model_admin.model)]
         model_tags.sort()
         return tuple([(tag, tag) for tag in model_tags])
 
@@ -68,8 +70,8 @@ class TaggitInlineBase():
     Use TaggitStackedInline or TaggitTabularInline.
     """
     model = TaggedItem
-    verbose_name = 'Tag'
-    verbose_name_plural = 'Tags'
+    verbose_name = _('Tag')
+    verbose_name_plural = _('Tags')
     ordering = ('tag__name',)
 
 
